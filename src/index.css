@@ -1,13 +1,41 @@
+@font-face {
+  font-family: 'FontalLobe';
+  font-style: normal;
+  font-weight: normal;
+  src: url('fonts/Fontal_Lobe_Regular.woff') format('woff');
+}
+
 body {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  font-family:  -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
+    background-color: #64a1f0;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+textarea {
+  color: white;
+  font-family: "FontalLobe", sans-serif;
+  border: none;
+  background-color: transparent;
+  resize: none;
+  font-size: 54px;
+  outline: none;
+}
+
+.type-area {
+  outline: 0
+}
+.font-0 {
+  font-family: "FontalLobe", serif;
+}
+
+.font-1 {
+  font-family: "Helvetica", sans-serif;
+}
+
+.font-2 {
+  font-family: "Times New Roman", serif;
 }
