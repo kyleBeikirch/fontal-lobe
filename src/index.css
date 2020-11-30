@@ -24,18 +24,3 @@ textarea {
   font-size: 54px;
   outline: none;
 }
-
-.type-area {
-  outline: 0
-}
-.font-0 {
-  font-family: "FontalLobe", serif;
-}
-
-.font-1 {
-  font-family: "Helvetica", sans-serif;
-}
-
-.font-2 {
-  font-family: "Times New Roman", serif;
-}

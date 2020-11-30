@@ -2,12 +2,13 @@ import React, {useEffect, useState, useRef} from 'react';
 import './libraries/canvasInput.min'
 
 function App() {
-  const fontFamilies = ['FontalLobe', 'Arial', 'Helvetica']
+  const fontFamilies = ['FontalLobe', 'Arial', "Times New Roman"]
   const [bgColor, setBgColor] = useState('#64a1f0')
   const [textColor, setTextColor] = useState('#000000')
   const [timerOn, setTimerOn] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
+  var capturer = new CCapture( { format: 'webm' } );
 
   function toggle() {
     setTimerOn(!timerOn);
