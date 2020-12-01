@@ -1,5 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import './libraries/canvasInput.min'
+import CCapture from 'ccapture.js'
 
 function App() {
   const fontFamilies = ['FontalLobe', 'Arial', "Times New Roman"]
@@ -8,7 +9,8 @@ function App() {
   const [timerOn, setTimerOn] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
-  var capturer = new CCapture( { format: 'webm' } );
+  const captureRef = useRef(null);
+  const capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
 
   function toggle() {
     setTimerOn(!timerOn);
@@ -17,11 +19,15 @@ function App() {
   useEffect(() => {
     let interval = null;
     if (timerOn) {
+      capturer.start();
       interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
+        capturer.capture( canvasRef.current );
       }, 120);
     } else if (!timerOn && fontIndex !== 0) {
       clearInterval(interval);
+      capturer.stop();
+      capturer.save();
     }
     return () => clearInterval(interval);
   }, [timerOn, fontIndex]);
