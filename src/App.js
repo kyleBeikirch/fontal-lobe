@@ -3,36 +3,39 @@ import './libraries/canvasInput.min'
 import CCapture from 'ccapture.js'
 
 function App() {
-  const fontFamilies = ['FontalLobe', 'Arial', "Times New Roman"]
   const [bgColor, setBgColor] = useState('#64a1f0')
   const [textColor, setTextColor] = useState('#000000')
   const [timerOn, setTimerOn] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
-  const captureRef = useRef(null);
-  const capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
+  var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
 
   function toggle() {
     setTimerOn(!timerOn);
   }
 
   useEffect(() => {
-    let interval = null;
+    console.log('effect run', timerOn)
     if (timerOn) {
+      console.log('start')
       capturer.start();
-      interval = setInterval(() => {
+      var interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
+        console.log('capture')
         capturer.capture( canvasRef.current );
-      }, 120);
+      },120);
     } else if (!timerOn && fontIndex !== 0) {
       clearInterval(interval);
+      console.log('stop')
       capturer.stop();
+      console.log('save')
       capturer.save();
     }
     return () => clearInterval(interval);
-  }, [timerOn, fontIndex]);
+  }, [timerOn, fontIndex, setFontIndex]);
 
   useEffect(() => {
+    const fontFamilies = ['FontalLobe', 'Arial', "Times New Roman"]
     if(canvasRef.current) {
       canvasRef.current.fontFamily(fontFamilies[fontIndex%3])
     }
@@ -54,7 +57,7 @@ function App() {
       height: 400,
       borderWidth: 0,
       boxShadow: 'none',
-      backgroundColor: bgColor,
+      backgroundColor: '#64a1f0',
       fontColor: 'black',
       fontSize: 36,
     });
