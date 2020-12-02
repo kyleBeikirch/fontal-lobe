@@ -8,27 +8,26 @@ function App() {
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
   const canvasInputRef = useRef(null)
-  const CCapture = window.CCapture || {}
-  var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
+  const mediaRecorder = useRef(null)
 
   function toggle() {
     setTimerOn(!timerOn);
   }
 
   useEffect(() => {
+    console.log('effect run')
     if (timerOn) {
+      console.log('start')
+
       var interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
-        capturer.start();
-        capturer.capture( canvasRef.current );
-        capturer.stop();
       },120);
     } else if (!timerOn && fontIndex !== 0) {
       clearInterval(interval);
-      capturer.save();
+      mediaRecorder.current.stop();
     }
     return () => clearInterval(interval);
-  }, [timerOn, fontIndex, setFontIndex]);
+  }, [timerOn, fontIndex, setFontIndex, mediaRecorder]);
 
   useEffect(() => {
     if(canvasInputRef.current) {
@@ -57,6 +56,25 @@ function App() {
       fontSize: 36,
     });
     canvasInputRef.current.focus()
+    var canvas = document.querySelector("canvas");
+    var video = document.querySelector("video");
+    var videoStream = canvas.captureStream(30);
+    mediaRecorder.current = new MediaRecorder(videoStream);
+    var chunks = [];
+    mediaRecorder.current.ondataavailable = function(e) {
+      chunks.push(e.data);
+    };
+
+    mediaRecorder.current.onstop = function(e) {
+      var blob = new Blob(chunks, { 'type' : 'video/mp4' });
+      chunks = [];
+      var videoURL = URL.createObjectURL(blob);
+      video.src = videoURL;
+    };
+    mediaRecorder.current.ondataavailable = function(e) {
+      chunks.push(e.data);
+    };
+    mediaRecorder.current.start();
   }, [])
 
   useEffect(() => {
@@ -84,6 +102,7 @@ function App() {
                value={textColor} onChange={updateTextColor}/>
           <label htmlFor="body">Text</label>
       </div>
+      <video autoPlay controls></video>
       <span></span>
       <span className='empty'></span>
     </div>
