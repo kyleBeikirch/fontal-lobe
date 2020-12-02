@@ -5,6 +5,7 @@ function App() {
   const [bgColor, setBgColor] = useState('#64a1f0')
   const [textColor, setTextColor] = useState('#000000')
   const [timerOn, setTimerOn] = useState(false)
+  const [showVideo, setShowVideo] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
   const canvasInputRef = useRef(null)
@@ -70,6 +71,7 @@ function App() {
       chunks = [];
       var videoURL = URL.createObjectURL(blob);
       video.src = videoURL;
+      setShowVideo(true)
     };
     mediaRecorder.current.ondataavailable = function(e) {
       chunks.push(e.data);
@@ -102,7 +104,7 @@ function App() {
                value={textColor} onChange={updateTextColor}/>
           <label htmlFor="body">Text</label>
       </div>
-      <video autoPlay controls></video>
+      <video autoPlay controls style={{display: showVideo ? 'block' : 'none'}}></video>
       <span></span>
       <span className='empty'></span>
     </div>
