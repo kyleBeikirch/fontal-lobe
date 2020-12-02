@@ -1,14 +1,14 @@
 import React, {useEffect, useState, useRef} from 'react';
 import './libraries/canvasInput.min'
 
-
 function App() {
   const [bgColor, setBgColor] = useState('#64a1f0')
   const [textColor, setTextColor] = useState('#000000')
   const [timerOn, setTimerOn] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
-  //var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
+  const CCapture = window.CCapture || {}
+  var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
 
   function toggle() {
     setTimerOn(!timerOn);
@@ -18,18 +18,18 @@ function App() {
     console.log('effect run', timerOn)
     if (timerOn) {
       console.log('start')
-      //capturer.start();
+      capturer.start();
       var interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
         console.log('capture')
-        //capturer.capture( canvasRef.current );
+        capturer.capture( canvasRef.current );
       },120);
     } else if (!timerOn && fontIndex !== 0) {
       clearInterval(interval);
       console.log('stop')
-      //capturer.stop();
+      capturer.stop();
       console.log('save')
-      //capturer.save();
+      capturer.save();
     }
     return () => clearInterval(interval);
   }, [timerOn, fontIndex, setFontIndex]);
@@ -89,7 +89,7 @@ function App() {
           <label htmlFor="body">Text</label>
       </div>
       <span></span>
-      <p class='empty'></p>
+      <p className='empty'></p>
     </div>
   );
 }
