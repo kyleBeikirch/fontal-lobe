@@ -7,6 +7,7 @@ function App() {
   const [timerOn, setTimerOn] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
+  const canvasInputRef = useRef(null)
   const CCapture = window.CCapture || {}
   var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
 
@@ -15,30 +16,25 @@ function App() {
   }
 
   useEffect(() => {
-    console.log('effect run', timerOn)
     if (timerOn) {
-      console.log('start')
-      capturer.start();
       var interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
-        console.log('capture')
+        capturer.start();
         capturer.capture( canvasRef.current );
+        capturer.stop();
       },120);
     } else if (!timerOn && fontIndex !== 0) {
       clearInterval(interval);
-      console.log('stop')
-      capturer.stop();
-      console.log('save')
       capturer.save();
     }
     return () => clearInterval(interval);
   }, [timerOn, fontIndex, setFontIndex]);
 
   useEffect(() => {
-    if(canvasRef.current) {
-      canvasRef.current.fontFamily(`FontalLobe-${fontIndex%3}`)
+    if(canvasInputRef.current) {
+      canvasInputRef.current.fontFamily(`FontalLobe-${fontIndex%3}`)
     }
-  }, [fontIndex, canvasRef])
+  }, [fontIndex, canvasInputRef])
 
   const updateBgColor = (event) => {
     setBgColor(event.target.value)
@@ -49,7 +45,7 @@ function App() {
   }
 
   useEffect(() => {
-    canvasRef.current = new window.CanvasInput({
+    canvasInputRef.current = new window.CanvasInput({
       canvas: document.getElementById('canvas'),
       fontFamily: 'FontalLobe-0',
       width: 600,
@@ -60,18 +56,18 @@ function App() {
       fontColor: 'black',
       fontSize: 36,
     });
-    canvasRef.current.focus()
+    canvasInputRef.current.focus()
   }, [])
 
   useEffect(() => {
-    canvasRef.current.backgroundColor(bgColor)
-    canvasRef.current.fontColor(textColor)
+    canvasInputRef.current.backgroundColor(bgColor)
+    canvasInputRef.current.fontColor(textColor)
     document.body.style.backgroundColor = bgColor;
-  }, [bgColor, textColor, canvasRef])
+  }, [bgColor, textColor, canvasInputRef])
 
   return (
     <div className="App">
-      <canvas id="canvas" width="600" height="400"></canvas>
+      <canvas id="canvas" width="600" height="400" ref={canvasRef}/>
       <button onClick={toggle}>
         {timerOn ? 'Pause' : 'Start'}
       </button>
@@ -89,7 +85,7 @@ function App() {
           <label htmlFor="body">Text</label>
       </div>
       <span></span>
-      <p className='empty'></p>
+      <span className='empty'></span>
     </div>
   );
 }
