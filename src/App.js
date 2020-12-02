@@ -1,6 +1,6 @@
 import React, {useEffect, useState, useRef} from 'react';
 import './libraries/canvasInput.min'
-import CCapture from 'ccapture.js'
+
 
 function App() {
   const [bgColor, setBgColor] = useState('#64a1f0')
@@ -8,7 +8,7 @@ function App() {
   const [timerOn, setTimerOn] = useState(false)
   const [fontIndex, setFontIndex] = useState(0);
   const canvasRef = useRef(null);
-  var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
+  //var capturer = new CCapture( { format: 'webm', framerate: 60, verbose: true } );
 
   function toggle() {
     setTimerOn(!timerOn);
@@ -18,26 +18,25 @@ function App() {
     console.log('effect run', timerOn)
     if (timerOn) {
       console.log('start')
-      capturer.start();
+      //capturer.start();
       var interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
         console.log('capture')
-        capturer.capture( canvasRef.current );
+        //capturer.capture( canvasRef.current );
       },120);
     } else if (!timerOn && fontIndex !== 0) {
       clearInterval(interval);
       console.log('stop')
-      capturer.stop();
+      //capturer.stop();
       console.log('save')
-      capturer.save();
+      //capturer.save();
     }
     return () => clearInterval(interval);
   }, [timerOn, fontIndex, setFontIndex]);
 
   useEffect(() => {
-    const fontFamilies = ['FontalLobe', 'Arial', "Times New Roman"]
     if(canvasRef.current) {
-      canvasRef.current.fontFamily(fontFamilies[fontIndex%3])
+      canvasRef.current.fontFamily(`FontalLobe-${fontIndex%3}`)
     }
   }, [fontIndex, canvasRef])
 
@@ -52,7 +51,7 @@ function App() {
   useEffect(() => {
     canvasRef.current = new window.CanvasInput({
       canvas: document.getElementById('canvas'),
-      fontFamily: 'FontalLobe',
+      fontFamily: 'FontalLobe-0',
       width: 600,
       height: 400,
       borderWidth: 0,
@@ -89,6 +88,8 @@ function App() {
                value={textColor} onChange={updateTextColor}/>
           <label htmlFor="body">Text</label>
       </div>
+      <span></span>
+      <p class='empty'></p>
     </div>
   );
 }
