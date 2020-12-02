@@ -54,6 +54,7 @@ function App() {
       boxShadow: 'none',
       backgroundColor: '#64a1f0',
       fontColor: 'black',
+      value: 'Type with brains behind its face.',
       fontSize: 36,
     });
     canvasInputRef.current.focus()
