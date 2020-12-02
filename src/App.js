@@ -13,13 +13,13 @@ function App() {
 
   function toggle() {
     setTimerOn(!timerOn);
+    if(!timerOn){
+      mediaRecorder.current.start();
+    }
   }
 
   useEffect(() => {
-    console.log('effect run')
     if (timerOn) {
-      console.log('start')
-
       var interval = setInterval(() => {
         setFontIndex(fontIndex => fontIndex + 1);
       },120);
@@ -76,7 +76,6 @@ function App() {
     mediaRecorder.current.ondataavailable = function(e) {
       chunks.push(e.data);
     };
-    mediaRecorder.current.start();
   }, [])
 
   useEffect(() => {
